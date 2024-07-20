@@ -1,6 +1,10 @@
 import OpenAI from "openai";
+import dotenv from "dotenv";
 import JobApplication from "../infrastructure/schemas/jobApplication";
 import { Types } from "mongoose";
+
+// Load environment variables
+dotenv.config();
 
 // Define an interface for the Job schema
 interface Job {
@@ -17,19 +21,22 @@ interface JobApplicationSchema {
     rating?: string | null;
 }
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const apiKey = process.env.OPENAI_API_KEY;
+
+if (!apiKey) {
+    throw new Error("The OPENAI_API_KEY environment variable is missing or empty.");
+}
+
+const client = new OpenAI({ apiKey });
 
 export async function generateRating(jobApplicationId: Types.ObjectId) {
-    // Use the JobApplicationSchema interface to define the structure of jobApplication
     const jobApplication = await JobApplication.findById(jobApplicationId).populate("job");
 
     if (!jobApplication) {
         throw new Error("Job application not found");
     }
 
-    // Assert that jobApplication.job is of type Job
     const job = jobApplication.job as unknown as Job;
-
     const answers = jobApplication.answers;
 
     if (!job || !job.title || !answers) {

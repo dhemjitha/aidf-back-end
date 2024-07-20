@@ -21,14 +21,14 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function generateRating(jobApplicationId: Types.ObjectId) {
     // Use the JobApplicationSchema interface to define the structure of jobApplication
-    const jobApplication = await JobApplication.findById(jobApplicationId).populate("job") as JobApplicationSchema;
+    const jobApplication = await JobApplication.findById(jobApplicationId).populate("job");
 
     if (!jobApplication) {
         throw new Error("Job application not found");
     }
 
     // Assert that jobApplication.job is of type Job
-    const job = jobApplication.job as Job;
+    const job = jobApplication.job as unknown as Job;
 
     const answers = jobApplication.answers;
 

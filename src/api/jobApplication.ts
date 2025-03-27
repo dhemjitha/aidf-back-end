@@ -5,10 +5,8 @@ import AuthorizationMiddleware from "./middleware/authorization-middleware";
 
 const jobApplicationRouter = express.Router();
 
-// jobApplicationRouter.route("/").post(createJobApplication).get(ClerkExpressRequireAuth({}), AuthorizationMiddleware, getJobApplications);
-// jobApplicationRouter.route("/:id").get(ClerkExpressRequireAuth({}), AuthorizationMiddleware, getJobApplicationById).delete(ClerkExpressRequireAuth({}), AuthorizationMiddleware, deleteJobApplication);
-
-jobApplicationRouter.route("/").post(createJobApplication).get(ClerkExpressRequireAuth({}), getJobApplications);
-jobApplicationRouter.route("/:id").get(ClerkExpressRequireAuth({}), getJobApplicationById).delete(ClerkExpressRequireAuth({}), AuthorizationMiddleware, deleteJobApplication);
+jobApplicationRouter.route("/").post(createJobApplication).get(ClerkExpressRequireAuth({}), AuthorizationMiddleware, getJobApplications);
+jobApplicationRouter.route("/:id")
+  .get(ClerkExpressRequireAuth({}), AuthorizationMiddleware, getJobApplicationById).delete(ClerkExpressRequireAuth({}), AuthorizationMiddleware, deleteJobApplication);
 
 export default jobApplicationRouter;
